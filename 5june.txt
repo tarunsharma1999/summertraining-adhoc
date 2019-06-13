@@ -1,0 +1,40 @@
+gedit .bashrc
+uname -r
+cat /etc/os-release
+echo $PATH
+which date
+path set icon X command Y
+java s prg start krna.
+
+
+
+----------->TOPIC<-----------
+1. O/P redirection
+   1.1 file 
+	>filename=overwrites. 
+	>>filename=appends.
+	2>filename=overwrites but only with error.
+	2>>filename=appends only with error.  
+	&>filename=overwrites with sucess and failure command.
+	&>>filename=appends with sucess and failure command.
+	$? errorcode checker. 0=sucess non-zero=failure.
+	grep -i=casesensitive. -w=only given string.
+	| -> pipeline, ram stored data
+		cal | head -3 =from hear to 3.
+		cal | tail -3 = from 3 to tail.
+   1.2 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
