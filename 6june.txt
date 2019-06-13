@@ -1,0 +1,18 @@
+if----------------------------------------> CLOUD <----------------------------------------
+sno.	OS		Amazon	web service
+1	image		AMI (amazon machine image )
+2	RAM CPU		ECU (elastic compute unit )
+3	HDD 		EBU (elastic block storage)
+4	user pass	autoset from user
+
+
+ec2 = elastic compute cloud = used to fetch OS.
+mstsc = microsoft terminal service = RDP in windows
+remote server in linux
+
+
+
+USER----------> INtERNET -----------------> AWS (OS)
+
+windows protocol =    RDP remote desktop protocol (similar to teamviewer)
+linux bsed protocol = SSH Secure Shell
