@@ -1,0 +1,16 @@
+----------------------------------------> file handling <----------------------------------------
+
+1.creating a file: 
+	f=open('hello.txt','w')
+	f.write("Hello world, Write here to write in file")
+	f.close()
+2. Read Operation:
+	f=open('hello.txt','r')
+	data=f.read()
+	print(data)
+	f.seek(0)
+	f.seek(:)
+
+	w+: r/w always creates file.
+	r+: r/w but creates file only once. and replace from starting.
+	    like a file is already stored and then if we write it from start.

@@ -1,0 +1,50 @@
+MBR BIOS | UEFI GPT
+smallest unit of HDD=sector, 1 sector (minimum size) = 512byte.
+
+
+
+-----------------------------> diskpart <--------------------------------
+lsblk
+fdisk -l /dev/xvdf
+To go in HDD:- 				fdisk /dev/xvdf
+To check partitions:-			print or p
+-----------------------------> To create new partitions <---------------------------------
+step 1. create partitions.
+	new-> partition type -> partition number -> first sector -> last sector -> wq or q
+step 2. format partitions.
+	type=== windows-> NTFS | MAC-> HFS+ | linux-> XFS | common -> FAT
+	format== mkfs.type /dev/xvdf1
+step 3. mount 
+
+
+
+--------------------------------> TO DEPLOY ANY SEREVEF <---------------------------------
+Step 1. install software related to that server.
+	rpm -q httpd
+	yum install httpd
+step 2. configure that server.
+	rpm -qc httpd
+	/etc/httpd/conf/httpd.conf (No changes needed)
+step 3. start service.
+	systemctl start servicename		systemctl start httpd
+	systemctl status servicename		systemctl status https
+	/var/www/html==document root for html
+
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

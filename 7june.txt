@@ -1,0 +1,14 @@
+file security
+permissions- READ =r.	WRITE =w. EXECUTION =x
+types of user:- owner/user=u. group=g ( itself and can be defined later) others==o.
+ex=chmod u+r filename
+inode=metadata of file. -d to check directory.
+root = bosss. dikhane k liye hata deta h but real m he is boss
+
+task= how to remove write permission from admin/root
+
+crontab
+
+---------------------------->groups commands <-------------------------------------------
+1. groups
+roupadd
