@@ -1,0 +1,11 @@
+---------------------------------> Creating own Docker images <--------------------------------------
+1. create empty directory.
+2. create your data/file in directory.
+3. create file with name = Dockerfile and write this
+4. now we build image by =
+	docker build -t "imagename" /location/
+5. docker run -itd --name "" -p 1234:80 adhocweb
+
+  devops
+  blockchain
+  datascience
