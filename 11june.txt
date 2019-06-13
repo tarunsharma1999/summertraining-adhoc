@@ -1,0 +1,26 @@
+------------------------> Creating logical volume <------------------------------------------------
+step 1.= create physical volume (PV)
+	 pvcreate /dev/xvdf
+step 2.= create virtual group
+	 vgcreate <group-name> PV1 PV2
+	 ex:- vgcreate virthdd PV1 PV2
+	 vgdisplay virthdd.
+step 3.= creating logical volume 
+	 lvcreate --name <logical-name> --size <sizeoflv> <nameofVG>
+	 lvcreate --name name --size 500M virthdd
+	 lvdiskplay to see.
+
+useradd adhoc
+passwd adhoc "123  "
+vim /etc/ssh/sshd_config
+passwordauthentication
+
+------------------------------------>  MICRO OS  <-----------------------------------------------
+
+ex := LXC
+creating small small os for individual services/tasks.
+RHEL 8 = PODMAN + BULLDAH.
+RHEL 7 = DOCKER.
+
+like we need to install software on a system. instead we will install a os which have that 
+software installed.

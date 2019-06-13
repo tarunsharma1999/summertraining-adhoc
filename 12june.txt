@@ -1,0 +1,20 @@
+----------------------------------------> DOCKER <------------------------------------------------
+
+starting docker service	-> systemctl start docker
+searching docker image	-> docker search <name>
+pulling docker image	-> docker pull <imagename>
+checking docker images	-> docker imaeges
+creating container 	-> docker run --it <imagename> { i=interactive t=terminal }
+
+
+to check container status-> docker ps -a {stopped services}
+to check running status	-> docker ps
+
+
+starting container	-> docker start <container-name>
+attaching container	-> docker attach <container-name>
+naming container	-> docker -it --name c1 fedora bash
+
+
+going inside running container	-> docker exec -it c1 bash
+				   wont stop even you terminate.
