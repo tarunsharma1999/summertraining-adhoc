@@ -1,0 +1,10 @@
+------------------------------------------> ANSIBLE <---------------------------------------------
+
+step 1 -> Pick two machines.
+step 2 -> install ansible on base machine.
+step 3 -> allow ssh from base machine to target machine. (password assign)
+step 4 -> inventory file => /etc/ansible/hosts to tell ip of target machine.
+step 5 -> ssh-keygen  to genrate RSA key.
+	  ssh-copy-id ec2-user@ip => to send key to target machine
+step 6 -> to connect ssh using key
+	  ansible a  -u ec2-user -m ping
