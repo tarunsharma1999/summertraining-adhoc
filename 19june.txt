@@ -1,0 +1,21 @@
+--------------------> Machine learning <-----------------------------
+ 		
+NUMPY
+array create-> 
+	numpy.array([1,2,3])
+	numpy.array([[1,2],[3,4],[5,6]])	#2 dimension array
+	numpy.zeros((1,2),dtype=int)
+	numpy.full((1,2),9)			#array with element 9
+	
+shape->
+	x.shape
+	x.reshape()	
+
+
+
+DATA VISUALISATION
+mpld3 
+matplotib 
+seaborn
+
+	
