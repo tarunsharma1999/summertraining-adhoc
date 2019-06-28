@@ -1,0 +1,148 @@
+#AMI or Server OS: CentOS 7 (x86_64) - with Updates HVM
+
+#1.instance create:
+#	type & search : CentOS 7 (x86_64)
+#	install the instance from aws 
+
+#2. disk accidental termination policy
+#	change termination protection > enable
+
+#3. Attach one Elastic IP to your instance 
+#	select network & security > elastic IPs > allocate new address > allocate > close
+#	select address & click associate address > select instance > select private ip > associate 
+
+################################################################################################################
+
+								Prerequisite
+------------------------------------------------->Phase 2<------------------------------------------------
+
+1)  For server version		:	cat /etc/os-release 
+    
+    #To check disk size 	:	lsblk
+
+    #Check RAM          	:	free -m
+
+    #Check CPU          	:	cat /proc//cpuinfo 
+
+2)   Update packages    	:	yum -y update
+
+3)  Format disk and mount
+	a) Make disk2 volume LVM type for future app data:
+
+		yum install lvm2
+		pvcreate /dev/xvdf
+		vgcreate myvirhdd /dev/xvdf
+		lvcreate --name disk2 --size 4G myvirhdd
+
+	b) Format with xfs file system
+
+		mkfs.xfs /dev/mapper/myvirhdd-disk2
+
+	c) mount this on /home2 with "no execution binary " security flag
+
+		mount  /dev/mapper/myvirhdd-disk2  /home2
+		echo /dev/mapper/myvirhdd-disk2    /home2     xfs    noexec >>/etc/fstab 
+		
+         	mount -a
+
+4) Disable SELINUX :		sed s/enforcing/disabled/g config (#/etc/selinux/config)
+
+5) Set timezone of server to IST:
+		 cd /etc
+		 ln -sf /usr/share/zoneinfo/Asia/Calcutta localtime
+
+6) Install basic utility like netstat,wget, vim,git:
+
+	netstat : yum install net-tools
+
+	wget	: yum install wget
+
+	vim	: yum install vim
+
+	git	: yum install git
+
+7) Motd.txt :
+   
+cat <<EOT >>/etc/profile.d/motd.txt
+echo "###############################################################"
+echo "#                 Authorized access only!                     #" 
+echo "# Disconnect IMMEDIATELY if you are not an authorized user!!! #"
+echo "#         All actions Will be monitored and recorded          #"
+echo "###############################################################"
+echo "+++++++++++++++++++++++++++++++ SERVER INFO ++++++++++++++++++++++++++++++++"
+echo "CPU :  $(cat /proc/cpuinfo | grep "model name"|awk -F: '{print $2}')"
+echo "Memory: $(free -h | grep Mem: | awk '{print $2}' )"
+echo "Swap: $(free -h | grep Swap: |awk  '{print $2}')"
+echo "Disk: $(lsblk | grep -w  xvda | awk '{print $4}')"
+echo "Distro: $(cat /etc/os-release| grep -w PRETTY_NAME | awk -F '"' '{print $2}') with $(uname -r)"
+echo "CPU Load: $(uptime | awk -F ':' '{print $5}')"
+echo "Free Disk: $(df -h | grep /dev/xvda | awk '{print $4}')"
+echo "Free Memory: $(free -h | grep -w Mem: | awk '{print $4}')"
+echo "Free Swap: $(free -h | grep -w Swap: | awk '{print $4}')"
+echo "Public Address: $(dig +short myip.opendns.com @resolver1.opendns.com)"
+echo "Private Address: $(ifconfig | grep -w broadcast | awk -F ' ' '{print $2}')"
+echo "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
+EOT
+
+===================================================================================================================
+Phase 3:
+
+1. Packages:
+
+	-- > Install Apache 2.4.x server with SSL and proxy module support :
+		sudo yum install httpd
+		sudo systemctl enable httpd
+		sudo systemctl start httpd
+
+	-- > Install PHP v7.x with essential php modules like php-mysql, php-devel, php-mbstring etc which is required by Application :
+				
+		yum install https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+		yum install http://rpms.remirepo.net/enterprise/remi-release-7.rpm
+		yum install yum-utils
+		yum-config-manager --enable remi-php73
+		yum install php php-mcrypt php-cli php-gd php-curl php-mysql php-ldap php-zip php-fileinfo
+		php -v
+
+2. User Setup:
+
+	-- > Create one user blu with passwordless login and blu user home directory should be /home2
+		useradd -m -d /home2/blu blu
+
+	-- > Create public_html folder under user blu home directory 
+		mkdir home2/blu/public_html
+	-- > Use this public_html folder for web files and that will be your document root in Apache  
+		chcon -R --reference=/var/www/html/ /home2/blu/public_html 
+		chcon -R -t httpd_sys_content_t /home2/blu/public_html 
+		semanage fcontext -a -t httpd_sys_content_t "/home2/blu/public_html(/.*)?" 
+		setsebool -P httpd_enable_homedirs true 
+		chmod 755 /home2/blu/public_html # important !!
+		service httpd restart 
+
+3. Virtualhost configuration:
+	-- > Create two virtualhost configuration under /etc/httpd/conf.d as blu-php.conf for better management rather than /etc/httpd/httpd.conf as follows:
+
+		-- ServerName will be blu.adhocnw.com in your apache virtual hosting
+
+		cat <<EOF >>/etc/httpd/conf.d/blu-php.conf
+		<VirtualHost *:80>
+		ServerName bluboy.adhocnw.com
+		ServerAlias www.bluboy.adhocnw.com
+		DocumentRoot /home2/blu/public_html
+		<Directory /home2/blu/public_html>
+ 		Options -Indexes +FollowSymLinks
+ 		AllowOverride All
+		</Directory>
+
+4. Now you server is ready to serve php applications. Setup phpinfo page and your file name will phpinfo.php that will be access by http://#bluboy.adhocnw.com url 
+
+		<IfModule dir_module>
+			DirectoryIndex phpinfo.php
+		</IfModule>
+		ErrorLog /var/log/httpd/bluboy-adhocnw.com_error.log
+		CustomLog /var/log/httpd/bluboy-adhocnw.com_access.log combined
+		</VirtualHost>
+
+		EOF
+
+5. Test your application using /etc/hosts and  point bluboy.adhocnw.com to your Instance IP
+echo 13.234.81.188 bluboy.adhocnw.com>>/etc/hosts
